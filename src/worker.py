@@ -7,15 +7,30 @@ from loguru import logger
 from src.shared.infrastructure.config import settings
 from src.shared.infrastructure.database import SessionLocal
 
+from pathlib import Path
 from src.modules.ingestion.services.file_watcher import FileWatcherService
+
+def ensure_storage_dirs():
+    """Asegura que los directorios de almacenamiento existan."""
+    dirs = [
+        settings.UPLOAD_DIRECTORY,
+        settings.CLIPS_OUTPUT_DIRECTORY,
+        settings.TEMP_DIRECTORY
+    ]
+    for d in dirs:
+        path = Path(d)
+        if not path.exists():
+            logger.info(f"Creando directorio de almacenamiento: {path}")
+            path.mkdir(parents=True, exist_ok=True)
 
 def run_worker():
     logger.info("Iniciando CallQA Worker...")
+    
+    # Asegurar infraestructura de carpetas
+    ensure_storage_dirs()
+    
     db = SessionLocal()
-    
-    # Inicializar servicios
-    file_watcher = FileWatcherService(db)
-    
+...    
     try:
         while True:
             # 1. Ingestion: buscar nuevos archivos y registrarlos
