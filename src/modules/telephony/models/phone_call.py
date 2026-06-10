@@ -2,7 +2,7 @@
 Modelos del sistema WFM (Read-Only desde Python).
 Módulo: Telephony
 """
-from sqlalchemy import Column, BigInteger, String, DateTime, ForeignKey, Boolean, JSON
+from sqlalchemy import Column, BigInteger, String, DateTime, ForeignKey, Boolean, JSON, Integer
 from sqlalchemy.orm import relationship
 from src.shared.infrastructure.database import Base
 

@@ -2,6 +2,7 @@
 Contrato para el módulo de Telephony.
 Define cómo otros módulos pueden solicitar información de operadores y llamadas.
 """
+from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Optional, List, Dict, Any
 
