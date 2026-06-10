@@ -7,8 +7,8 @@ from typing import Optional
 
 class TelephonyContract(ABC):
     @abstractmethod
-    def get_operator_id_by_code(self, code: str) -> Optional[int]:
+    def get_employee_id_by_username(self, username: str) -> Optional[int]:
         """
-        Obtiene el ID interno de un operador dado su código (username).
+        Obtiene el ID interno de un empleado dado su username.
         """
         pass

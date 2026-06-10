@@ -1,33 +1,32 @@
 """
-Modelo de datos para Operadores y Llamadas CDR.
+Modelos del sistema WFM (Read-Only desde Python).
 Módulo: Telephony
 """
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, BigInteger, String, DateTime, ForeignKey, Boolean, JSON
 from sqlalchemy.orm import relationship
-from datetime import datetime
 from src.shared.infrastructure.database import Base
 
-class Operator(Base):
-    __tablename__ = "operators"
+class Employee(Base):
+    __tablename__ = "employees"
     
-    id = Column(Integer, primary_key=True, index=True)
-    operator_code = Column(String(50), unique=True, index=True, nullable=False)
-    name = Column(String(100), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    id = Column(BigInteger, primary_key=True, index=True)
+    employee_number = Column(String(20), unique=True, nullable=False)
+    username = Column(String(255), unique=True, nullable=False)
+    cisco_username = Column(String(255), unique=True)
+    first_name = Column(String(255), nullable=False)
+    last_name = Column(String(255), nullable=False)
+    is_active = Column(Boolean, default=True)
+    metadata_json = Column("metadata", JSON) # Mapeo de la columna 'metadata' de Laravel
 
-class PhoneCall(Base):
-    __tablename__ = "phone_calls"
+class CallRecord(Base):
+    __tablename__ = "call_records"
     
-    id = Column(Integer, primary_key=True, index=True)
-    call_id = Column(String(100), unique=True, index=True, nullable=False)
-    operator_id = Column(Integer, ForeignKey("operators.id"), nullable=False)
+    id = Column(BigInteger, primary_key=True, index=True)
+    cisco_call_id = Column(String(255), nullable=False)
+    phone_number = Column(String(255), nullable=False)
+    ivr_started_at = Column(DateTime, nullable=False)
+    talk_time = Column(BigInteger, default=0) # en segundos
+    employee_id = Column(BigInteger, ForeignKey("employees.id"))
+    status = Column(String(255), default="pending_operator")
     
-    phone_number = Column(String(50))
-    direction = Column(String(20))  # inbound, outbound
-    start_time = Column(DateTime, nullable=False, index=True)
-    end_time = Column(DateTime, nullable=False)
-    duration_seconds = Column(Integer, nullable=False)
-    
-    imported_at = Column(DateTime, default=datetime.utcnow)
-    
-    operator = relationship("Operator")
+    employee = relationship("Employee")

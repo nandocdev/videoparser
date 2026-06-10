@@ -27,11 +27,11 @@ class RegisterUploadedFileAction:
             logger.warning(f"Formato de archivo inválido, omitiendo: {filename}")
             return None
         
-        # Obtener ID del operador mediante el contrato de Telephony
-        operator_id = self.telephony.get_operator_id_by_code(parsed_info["username"])
+        # Obtener ID del empleado mediante el contrato de Telephony
+        employee_id = self.telephony.get_employee_id_by_username(parsed_info["username"])
         
-        if not operator_id:
-            logger.error(f"Operador '{parsed_info['username']}' no registrado en el sistema. Archivo: {filename}")
+        if not employee_id:
+            logger.error(f"Empleado '{parsed_info['username']}' no encontrado en WFM. Archivo: {filename}")
             return None
             
         # Verificar si el archivo ya fue registrado previamente
@@ -48,7 +48,7 @@ class RegisterUploadedFileAction:
                 filename=filename,
                 file_path=str(file_path),
                 file_size=file_path.stat().st_size,
-                operator_id=operator_id,
+                employee_id=employee_id,
                 recording_date=parsed_info["recording_date"],
                 state=ProcessingState.RECEIVED
             )
