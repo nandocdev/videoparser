@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+pydantic
+pydantic-settings
+pyyaml
+librosa
+numpy
+loguru
+requests
+python-dotenv
+alembic
+pytest
+httpx
