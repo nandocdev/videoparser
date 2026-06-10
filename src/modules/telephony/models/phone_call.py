@@ -30,3 +30,20 @@ class CallRecord(Base):
     status = Column(String(255), default="pending_operator")
     
     employee = relationship("Employee")
+
+class AgentCallPerformance(Base):
+    __tablename__ = "agent_call_performance"
+    
+    id = Column(BigInteger, primary_key=True, index=True)
+    employee_id = Column(BigInteger, ForeignKey("employees.id"))
+    agent_login_id = Column(String(255), nullable=False)
+    start_time = Column(DateTime, nullable=False, index=True)
+    end_time = Column(DateTime)
+    total_duration = Column(Integer, default=0)
+    talk_time = Column(Integer, default=0)
+    hold_time = Column(Integer, default=0)
+    work_time = Column(Integer, default=0)
+    phone_number = Column(String(255))
+    csq_name = Column(String(255))
+    
+    employee = relationship("Employee")
