@@ -44,3 +44,6 @@ wheels/
 .project
 .pydevproject
 .settings/
+uploads/
+clips/
+temp/
