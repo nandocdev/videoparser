@@ -7,19 +7,25 @@ from loguru import logger
 from src.shared.infrastructure.config import settings
 from src.shared.infrastructure.database import SessionLocal
 
+from src.modules.ingestion.services.file_watcher import FileWatcherService
+
 def run_worker():
     logger.info("Iniciando CallQA Worker...")
     db = SessionLocal()
     
+    # Inicializar servicios
+    file_watcher = FileWatcherService(db)
+    
     try:
         while True:
-            # Aquí vendrá la lógica de orquestación
-            # 1. Ingestion: buscar nuevos archivos
-            # 2. Telephony: sincronizar CDR si es necesario
-            # 3. Processing: ejecutar pipeline
+            # 1. Ingestion: buscar nuevos archivos y registrarlos
+            file_watcher.scan_for_new_files()
             
-            logger.debug("Escaneando tareas...")
-            time.sleep(settings.worker_check_interval)
+            # 2. Telephony: sincronizar CDR (Pendiente implementar CDRSyncAction)
+            
+            # 3. Processing: ejecutar pipeline (Pendiente implementar ProcessingPipeline)
+            
+            time.sleep(settings.WORKER_CHECK_INTERVAL)
             
     except KeyboardInterrupt:
         logger.info("Worker detenido por el usuario.")
