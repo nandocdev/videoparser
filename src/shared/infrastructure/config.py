@@ -4,6 +4,7 @@ Configuración global de la aplicación.
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 from typing import Optional
+import os
 
 class Settings(BaseSettings):
     # App
@@ -15,9 +16,9 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql+psycopg2://callqa:password@localhost:5432/callqa_db"
     
     # Storage
-    UPLOAD_DIRECTORY: Path = Path("/data/callqa/uploads")
-    CLIPS_OUTPUT_DIRECTORY: Path = Path("/data/callqa/clips")
-    TEMP_DIRECTORY: Path = Path("/tmp/callqa")
+    UPLOAD_DIRECTORY: str = "uploads"
+    CLIPS_OUTPUT_DIRECTORY: str = "clips"
+    TEMP_DIRECTORY: str = "temp"
     
     # CDR Integration
     CDR_API_URL: str = "http://cisco-uccx:8080/api/v1"
@@ -39,6 +40,9 @@ class Settings(BaseSettings):
     # Logging
     LOG_LEVEL: str = "INFO"
     
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=Path(__file__).resolve().parent.parent.parent.parent / ".env",
+        extra="ignore"
+    )
 
 settings = Settings()

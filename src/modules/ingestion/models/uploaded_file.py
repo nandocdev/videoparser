@@ -25,7 +25,7 @@ class UploadedFile(Base):
     employee_id = Column(BigInteger, nullable=False, index=True)
     
     recording_date = Column(DateTime, nullable=False, index=True)
-    state = Column(SQLEnum(ProcessingState), default=ProcessingState.RECEIVED)
+    state = Column(String(20), default=ProcessingState.RECEIVED.value)
     
     error_message = Column(String(500), nullable=True)
     

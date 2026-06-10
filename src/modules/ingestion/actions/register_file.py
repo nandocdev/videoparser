@@ -57,7 +57,7 @@ class RegisterUploadedFileAction:
             self.db.commit()
             self.db.refresh(new_file)
             
-            logger.success(f"Archivo registrado: {filename} (Operador ID: {operator_id})")
+            logger.success(f"Archivo registrado: {filename} (Empleado ID: {employee_id})")
             return new_file
             
         except Exception as e:
