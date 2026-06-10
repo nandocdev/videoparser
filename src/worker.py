@@ -2,7 +2,7 @@
 Worker de procesamiento asíncrono.
 Orquesta los módulos de Ingestion y Processing.
 """
-import time
+import sys
 from loguru import logger
 from src.shared.infrastructure.config import settings
 from src.shared.infrastructure.database import SessionLocal
@@ -25,8 +25,8 @@ def ensure_storage_dirs():
             logger.info(f"Creando directorio de almacenamiento: {path}")
             path.mkdir(parents=True, exist_ok=True)
 
-def run_worker():
-    logger.info("Iniciando CallQA Worker...")
+def run_batch():
+    logger.info("Iniciando procesamiento Batch de CallQA...")
 
     # Asegurar infraestructura de carpetas
     ensure_storage_dirs()
@@ -40,21 +40,26 @@ def run_worker():
     processor = ProcessFileAction(db, correlator)
 
     try:
+        # 1. Ingestion: buscar nuevos archivos y registrarlos
+        logger.info("Fase 1: Escaneando nuevos archivos...")
+        file_watcher.scan_for_new_files()
+
+        # 2. Processing: ejecutar pipeline en todos los archivos encolados
+        logger.info("Fase 2: Procesando cola de archivos...")
+        processed_count = 0
         while True:
-            # 1. Ingestion: buscar nuevos archivos y registrarlos
-            file_watcher.scan_for_new_files()
-
-            # 2. Processing: ejecutar pipeline en el siguiente archivo encolado
             processed_any = processor.execute_next()
-
-            # Si no procesamos nada, dormimos para no saturar la CPU
             if not processed_any:
-                time.sleep(settings.WORKER_CHECK_INTERVAL)
+                break
+            processed_count += 1
 
-    except KeyboardInterrupt:
-        logger.info("Worker detenido por el usuario.")
+        logger.success(f"Batch finalizado. Se procesaron {processed_count} archivos en total.")
+
+    except Exception as e:
+        logger.exception(f"Error crítico en la ejecución del batch: {e}")
+        sys.exit(1)
     finally:
         db.close()
 
 if __name__ == "__main__":
-    run_worker()
+    run_batch()
