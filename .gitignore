@@ -1,2 +1,46 @@
-.venv
-__pycache__
+# Entornos virtuales
+.venv/
+env/
+venv/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Configuración y secretos
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Temp y Datos (según config.yaml propuesta)
+/data/
+/tmp/callqa/
+
+# IDEs
+.vscode/
+.idea/
+.project
+.pydevproject
+.settings/

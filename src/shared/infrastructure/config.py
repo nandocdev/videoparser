@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     # App
     APP_NAME: str = "CallQA Server"
     DEBUG: bool = False
+    SECRET_KEY: str = "secret-key-placeholder"
     
     # Database
     DATABASE_URL: str = "postgresql+psycopg2://callqa:password@localhost:5432/callqa_db"
@@ -26,6 +27,17 @@ class Settings(BaseSettings):
     # Processing
     FFMPEG_PATH: str = "ffmpeg"
     FFPROBE_PATH: str = "ffprobe"
+    AUDIO_SAMPLE_RATE: int = 16000
+    SILENCE_THRESHOLD_DB: int = -40
+    MIN_CALL_DURATION: int = 3
+    SILENCE_DURATION: int = 2
+    
+    # Worker
+    WORKER_CHECK_INTERVAL: int = 30
+    MAX_CONCURRENT_TASKS: int = 3
+    
+    # Logging
+    LOG_LEVEL: str = "INFO"
     
     model_config = SettingsConfigDict(env_file=".env")
 
